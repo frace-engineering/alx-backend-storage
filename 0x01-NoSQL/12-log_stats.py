@@ -6,6 +6,7 @@ from pymongo import MongoClient
 
 
 def get_log_stats():
+    """Get stats from the nginx log file"""
     client = MongoClient()
     db = client.logs
     collection = db.nginx
@@ -26,4 +27,5 @@ def get_log_stats():
 
 
 if __name__ == "__main__":
+    """Run the function"""
     get_log_stats()
