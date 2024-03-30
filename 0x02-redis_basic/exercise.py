@@ -33,3 +33,21 @@ class Cache:
 
     def get_int(self, key: str) -> Union[int, None]:
         return self.get(key, int)
+
+
+ @functools.wraps
+    def count_calls(method: Callable):
+        @functools.wraps(method)
+        def wrapper(self, *args, **kwargs):
+            key = method.__qualname__
+            self.redis.incr(key)
+            return method(self, *args, **kwargs)
+        return wrapper
+
+    @count_calls
+    def store(self, data: Union[str, bytes, int, float]) -> str:
+        """Take data argument and return a string"""
+        key = str(uuid.uuid4())
+        self._redis.set(key, data)
+        return key
+
